@@ -88,7 +88,7 @@ declare interface HoprCoreConnector {
   /**
    * Returns an instance of Indexer.
    */
-  readonly indexer: Indexer
+  readonly indexer?: Indexer
 }
 
 type HoprCoreConnectorStatic = typeof HoprCoreConnector
