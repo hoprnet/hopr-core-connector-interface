@@ -1,22 +1,18 @@
-import type { Hash, Ticket, SignedTicket, Signature } from './types'
-import type CoreConnector from '.'
+import type { SignedTicket, Hash } from './types'
 
-declare namespace Tickets {
+declare interface Tickets {
   /**
    * Stores signed ticket using channelId & challange.
-   * @param coreConnector coreConnector instance
    * @param channelId channel ID hash
    * @param signedTicket the signed ticket to store
    */
-  function store(coreConnector: CoreConnector, channelId: Hash, signedTicket: SignedTicket<Ticket, Signature>): Promise<void>
-
+  get(channelId: Hash): Promise<Map<string, SignedTicket>>
   /**
    * Get stored tickets.
-   * @param coreConnector coreConnector instance
    * @param channelId channel ID hash
    * @returns a promise that resolves to a Map of signed tickets keyed by the challange hex value.
    */
-  function get(coreConnector: CoreConnector, channelId: Hash): Promise<Map<string, SignedTicket<Ticket, Signature>>>
+  store(channelId: Hash, signedTicket: SignedTicket): Promise<void>
 }
 
 export default Tickets
