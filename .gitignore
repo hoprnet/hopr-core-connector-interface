@@ -1,5 +1,7 @@
 # Exclude Node.js stuff
 node_modules/
 
+lib
+
 # Exclude OSX stuff
 **/.DS_Store
