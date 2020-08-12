@@ -17,6 +17,7 @@ export default class MockConnector implements HoprCoreConnector {
   }
   readonly nonce: Promise<number>
   readonly utils = new MockUtils()
+  readonly types = MockTypes
 
   constructor(
     public db: LevelUp,
@@ -45,21 +46,27 @@ export default class MockConnector implements HoprCoreConnector {
 
 }
 
-export class MockUtils implements (typeof Utils) {
+export class MockUtils {
 
-  isPartyA(self: AccountId, counterparty: AccountId): boolean { return true }
+  isPartyA(self: MockAccountId, counterparty: MockAccountId): boolean { return true }
 
-  getId(self: AccountId, counterparty: AccountId, ...props: any[]): Promise<Hash> {
-    return Promise.resolve(self + "-" +counterparty)
+  getId(self: MockAccountId, counterparty: MockAccountId, ...props: any[]): Promise<MockHash> {
+    return Promise.resolve(new MockHash())
   }
 
-  pubKeyToAccountId(pubkey: Uint8Array, ...args: any[]): Promise<AccountId> {}
+  pubKeyToAccountId(pubkey: Uint8Array, ...args: any[]): Promise<MockAccountId> {
+    return Promise.resolve(new MockAccountId())
+  }
 
-  hash(msg: Uint8Array): Promise<Hash> {}
+  hash(msg: Uint8Array): Promise<MockHash> {
+    return Promise.resolve(new MockHash())
+  }
 
-  sign(msg: Uint8Array, privKey: Uint8Array, pubKey: Uint8Array): Promise<Signature> {}
+  sign(msg: Uint8Array, privKey: Uint8Array, pubKey: Uint8Array): Promise<MockSignature> {
+    return Promise.resolve(new MockSignature)
+  }
 
-  verify(msg: Uint8Array, signature: Signature, pubkey: Uint8Array): Promise<boolean>{
+  verify(msg: Uint8Array, signature: MockSignature, pubkey: Uint8Array): Promise<boolean>{
     return Promise.resolve(true)
   }
 
@@ -68,9 +75,28 @@ export class MockUtils implements (typeof Utils) {
   }
 }
 
+
 class MockBalance extends BN implements Types.Balance {
   SIZE = 100
   SYMBOL = "MOCK"
   DECIMALS = 18
 }
 
+class MockHash extends Uint8Array implements Types.Hash {}
+
+class MockSignature extends Uint8Array implements Types.Signature{
+  onChainSignature = new Uint8Array()
+  signature = new Uint8Array()
+  recovery = 0
+  msgPrefix = new Uint8Array()
+}
+
+class MockAccountId extends Uint8Array {}
+
+const MockTypes = {
+  AccountId: MockAccountId,
+  Balance: MockBalance,
+  NativeBalance: MockBalance,
+  Signature: MockSignature,
+  Hash: MockHash
+}
