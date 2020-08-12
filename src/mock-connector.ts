@@ -77,26 +77,83 @@ export class MockUtils {
 
 
 class MockBalance extends BN implements Types.Balance {
-  SIZE = 100
-  SYMBOL = "MOCK"
-  DECIMALS = 18
+  static SIZE = 100
+  static SYMBOL = "MOCK"
+  static DECIMALS = 18
 }
 
-class MockHash extends Uint8Array implements Types.Hash {}
+class MockHash extends Uint8Array implements Types.Hash {
+  static SIZE=10
+}
 
 class MockSignature extends Uint8Array implements Types.Signature{
+  static SIZE=10
   onChainSignature = new Uint8Array()
   signature = new Uint8Array()
   recovery = 0
   msgPrefix = new Uint8Array()
+  static create(){
+    return new MockSignature(0)
+  }
 }
 
-class MockAccountId extends Uint8Array {}
+class MockAccountId extends Uint8Array {
+  static SIZE = 10
+}
+
+class MockChannel {
+  static createFunded(channelBalance: MockChannelBalance): MockChannel {
+    return new MockChannel()
+  }
+  static createActive(channelBalance: MockChannelBalance): MockChannel {
+    return new MockChannel()
+  }
+  static createPending(pending: MockMoment, balance: MockChannelBalance): MockChannel {
+    return new MockChannel()
+  }
+
+  toU8a() {
+    return new Uint8Array()
+  }
+}
+class MockMoment extends BN {
+  static SIZE=10
+}
+
+
+class MockChannelBalance {
+  balance_a = new MockBalance(0)
+  balance = new MockBalance(0)
+
+  static SIZE = 10
+  static create(){
+    return new MockChannelBalance()
+  }
+  toU8a() {
+    return new Uint8Array()
+  }
+}
+
+class MockSignedChannel {
+  static SIZE=10
+  static create(){
+    return Promise.resolve(new MockSignedChannel())
+  }
+}
+
 
 const MockTypes = {
   AccountId: MockAccountId,
   Balance: MockBalance,
   NativeBalance: MockBalance,
   Signature: MockSignature,
-  Hash: MockHash
+  Hash: MockHash,
+  Channel: MockChannel,
+  ChannelBalance: MockChannelBalance,
+  Moment: MockMoment,
+  State: {SIZE: 10},
+  SignedChannel: MockSignedChannel,
+  Ticket: {},
+  SignedTicket: {},
+  TicketEpoch: {}
 }
